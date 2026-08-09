@@ -22,8 +22,6 @@ import { DesktopNavLink } from "./nav-link"
 
 interface DesktopNavProps {
   pathname: string
-  /** Drives the staggered entrance once the intro hands over. */
-  revealed: boolean
 }
 
 /**
@@ -33,7 +31,7 @@ interface DesktopNavProps {
  * users without JavaScript — and the breakpoints only decide what is *shown*:
  * secondary items appear inline from `xl`, and collapse into "More" below it.
  */
-export function DesktopNav({ pathname, revealed }: DesktopNavProps) {
+export function DesktopNav({ pathname }: DesktopNavProps) {
   const isDesktop = useMediaQuery(screens.lg)
   const isWide = useMediaQuery(screens.xl)
 
@@ -43,9 +41,10 @@ export function DesktopNav({ pathname, revealed }: DesktopNavProps) {
 
   return (
     <motion.div
+      data-reveal
       variants={staggerParent(0.045, 0.2)}
       initial="hidden"
-      animate={revealed ? "visible" : "hidden"}
+      animate="visible"
       className="hidden min-w-0 items-center lg:flex"
     >
       {navItems.map((item) => {

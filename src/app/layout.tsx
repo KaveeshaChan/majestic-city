@@ -3,8 +3,7 @@ import { Geist_Mono, Inter, Sora } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { SplashProvider } from "@/components/splash/splash-provider";
-import { SplashScreen } from "@/components/splash/splash-screen";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -44,7 +43,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0b0f",
+  // Matches `--surface`: the browser chrome should read as part of the page.
+  themeColor: "#f8f7f5",
   colorScheme: "light",
 };
 
@@ -60,20 +60,22 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* The intro is server-rendered so the page never flashes underneath
-            it — which also means it must be suppressed when there is no JS to
-            ever take it away. */}
+        {/* Motion serialises its `initial` values into the server HTML, so
+            without JavaScript every reveal — and the navbar itself — would stay
+            at opacity 0. `data-reveal` marks those elements; this puts them
+            back. */}
         <noscript>
-          <style>{"[data-splash]{display:none}"}</style>
+          <style>
+            {"[data-reveal],[data-reveal]>*{opacity:1!important;transform:none!important;filter:none!important}[data-nav-active]{background-color:#fff}"}
+          </style>
         </noscript>
       </head>
-      <body className="flex min-h-full flex-col font-sans">
-        <SplashProvider>
-          <SplashScreen />
+      <body className="flex min-h-full flex-col bg-surface font-sans">
+        <MotionProvider>
           <SiteHeader />
           <main className="flex flex-1 flex-col">{children}</main>
           <SiteFooter />
-        </SplashProvider>
+        </MotionProvider>
       </body>
     </html>
   );

@@ -35,6 +35,10 @@ export function DesktopNavLink({
       href={href}
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
+      // The "you are here" pill below is a Motion element, so it does not exist
+      // without JavaScript — leaving maroon text on the maroon bar. This hook
+      // lets the no-script stylesheet paint a plain white pill instead.
+      data-nav-active={isActive || undefined}
       className={cn(
         "relative inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-white/70",
         // Active gets a solid white "you are here" pill (below) with matching

@@ -16,10 +16,8 @@ export const siteConfig = {
 } as const
 
 /**
- * The logo is a wide wordmark (not a square icon), so its intrinsic ratio is
- * shared between the splash screen and the navbar. Keeping both boxes on the
- * same ratio is what makes the shared-layout morph scale uniformly instead of
- * stretching the artwork.
+ * The logo is a wide wordmark (not a square icon), so every box that holds it
+ * has to be driven off its intrinsic ratio rather than given a fixed height.
  */
 export const brandLogo = {
   src: "/logo.png",

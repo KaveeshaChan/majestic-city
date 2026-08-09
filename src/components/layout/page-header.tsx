@@ -1,4 +1,4 @@
-import { RevealOnMount } from "@/components/motion/reveal-on-mount"
+import { Stagger } from "@/components/motion/reveal"
 
 interface PageHeaderProps {
   eyebrow: string
@@ -20,7 +20,7 @@ export function PageHeader({
   return (
     <section className="border-b border-black/8 bg-ink text-ink-foreground">
       <div className="mx-auto w-full max-w-[1240px] px-6 pt-[calc(var(--header-height)+4.5rem)] pb-16 sm:px-8 sm:pb-20">
-        <RevealOnMount>
+        <Stagger stagger={0.07}>
           <p className="text-xs font-medium tracking-[0.2em] text-white/45 uppercase">
             {eyebrow}
           </p>
@@ -31,7 +31,7 @@ export function PageHeader({
             {description}
           </p>
           {children}
-        </RevealOnMount>
+        </Stagger>
       </div>
     </section>
   )
