@@ -111,14 +111,16 @@ export function MobileNav({ pathname, revealed }: MobileNavProps) {
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
                         "group flex items-center gap-3.5 rounded-2xl px-3 py-3 transition-colors",
-                        isActive ? "bg-white/12" : "hover:bg-white/6"
+                        // Same "you are here" language as the desktop pill: a
+                        // solid white badge with brand-colored icon.
+                        isActive ? "bg-white/8" : "hover:bg-white/6"
                       )}
                     >
                       <span
                         className={cn(
                           "flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors",
                           isActive
-                            ? "bg-white text-ink"
+                            ? "bg-white text-brand-strong"
                             : "bg-white/8 text-white/70 group-hover:text-white"
                         )}
                       >

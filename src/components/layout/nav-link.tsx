@@ -36,8 +36,13 @@ export function DesktopNavLink({
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "relative inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white/60",
-        isActive ? "text-white" : "text-white/60 hover:text-white"
+        "relative inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-white/70",
+        // Active gets a solid white "you are here" pill (below) with matching
+        // text; everything else is translucent white on the brand-red bar, so
+        // hover reads as a wash rather than competing with the active state.
+        isActive
+          ? "text-brand-strong"
+          : "text-white/75 hover:bg-white/12 hover:text-white"
       )}
     >
       {ownsHighlight && (
@@ -45,7 +50,7 @@ export function DesktopNavLink({
           aria-hidden
           layoutId={NAV_ACTIVE_LAYOUT_ID}
           transition={springSnappy}
-          className="absolute inset-0 rounded-full bg-white/12"
+          className="absolute inset-0 rounded-full bg-white shadow-[0_1px_2px_rgb(0_0_0/0.12)]"
         />
       )}
       <span className="relative">{title}</span>

@@ -97,8 +97,11 @@ export function SiteHeader() {
 }
 
 /**
- * The dark pill itself. Kept as a sibling of the content so its entrance
+ * The brand-red pill itself. Kept as a sibling of the content so its entrance
  * animation never becomes a transform on the logo's ancestors.
+ *
+ * Scrolling deepens the hue (`brand` → `brand-strong`) as well as the shadow,
+ * so the extra elevation reads through color, not just a bigger shadow.
  */
 function PillBackground({
   revealed,
@@ -118,16 +121,22 @@ function PillBackground({
       }
       transition={{ duration: 0.7, ease: EASE_OUT }}
       className={cn(
-        "absolute inset-0 rounded-full bg-ink/95 ring-1 ring-white/10 transition-shadow duration-500 supports-[backdrop-filter]:backdrop-blur-xl",
+        "absolute inset-0 rounded-full ring-1 ring-white/15 transition-[background-color,box-shadow] duration-500 supports-[backdrop-filter]:backdrop-blur-xl",
         elevated
-          ? "shadow-[0_18px_50px_-16px_rgb(0_0_0/0.65)]"
-          : "shadow-[0_10px_34px_-18px_rgb(0_0_0/0.5)]"
+          ? "bg-brand-strong/95 shadow-[0_18px_50px_-16px_rgb(0_0_0/0.65)]"
+          : "bg-brand/95 shadow-[0_10px_34px_-18px_rgb(0_0_0/0.5)]"
       )}
     />
   )
 }
 
-/** The trailing call-to-action, mirroring the reference concept's pill. */
+/**
+ * The trailing call-to-action, mirroring the reference concept's pill.
+ *
+ * The pill background is now brand-red, so the CTA can no longer use `brand`
+ * to mark "you're here" — it would vanish into the pill. It flips to a solid
+ * `ink` pill instead, which reads as clearly against red as white does.
+ */
 function ContactPill({
   revealed,
   isActive,
@@ -154,7 +163,7 @@ function ContactPill({
         className={cn(
           "group inline-flex h-10 items-center gap-1.5 rounded-full pr-3.5 pl-4 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white/70",
           isActive
-            ? "bg-brand text-brand-foreground hover:bg-brand-strong"
+            ? "bg-ink text-white hover:bg-black"
             : "bg-white text-ink hover:bg-white/88"
         )}
       >
