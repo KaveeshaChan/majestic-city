@@ -21,7 +21,9 @@ export function Eyebrow({
         "inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[0.6875rem] font-medium tracking-[0.14em] uppercase",
         tone === "light"
           ? "bg-brand-tint text-brand-strong ring-1 ring-brand/12"
-          : "bg-white/10 text-white/75 ring-1 ring-white/15",
+          // Over a photograph, so it carries its own contrast rather than
+          // borrowing whatever happens to be behind it.
+          : "bg-ink/45 text-white ring-1 ring-white/25 backdrop-blur-md",
         className
       )}
     >
