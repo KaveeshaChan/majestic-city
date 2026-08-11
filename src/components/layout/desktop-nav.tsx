@@ -86,10 +86,10 @@ function OverflowMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "group inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-white/70 data-[state=open]:bg-white data-[state=open]:text-brand-strong",
+          "group inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand/40 data-[state=open]:bg-brand-tint data-[state=open]:text-brand-strong",
           isActive
-            ? "bg-white text-brand-strong"
-            : "text-white/75 hover:bg-white/12 hover:text-white"
+            ? "bg-brand-tint text-brand-strong"
+            : "text-ink/65 hover:bg-surface-muted hover:text-ink"
         )}
       >
         More

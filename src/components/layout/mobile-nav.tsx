@@ -55,7 +55,7 @@ export function MobileNav({ pathname }: MobileNavProps) {
       >
         <SheetTrigger
           aria-label="Open navigation menu"
-          className="inline-flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/18 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none"
+          className="inline-flex size-10 items-center justify-center rounded-full bg-surface-muted text-ink transition-colors hover:bg-brand-tint hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:outline-none"
         >
           <Menu className="size-5" />
         </SheetTrigger>

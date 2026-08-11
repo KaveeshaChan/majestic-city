@@ -73,9 +73,8 @@
   /* Height of the floating navbar, used for scroll offsets and hero padding. */
   --header-height: 4.5rem;
 
-  /* A hair warm rather than pure white: paper, not a lightbox. */
-  --surface: oklch(0.9775 0.0025 67);
-  --surface-muted: oklch(0.9575 0.0035 67);
+  --surface: oklch(1 0 0);
+  --surface-muted: oklch(0.9675 0.0025 67);
   --hairline: oklch(0.1515 0.0085 285.34 / 9%);
 
   --background: var(--surface);

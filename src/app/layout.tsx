@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   // Matches `--surface`: the browser chrome should read as part of the page.
-  themeColor: "#f8f7f5",
+  themeColor: "#ffffff",
   colorScheme: "light",
 };
 
@@ -66,7 +66,7 @@ export default function RootLayout({
             back. */}
         <noscript>
           <style>
-            {"[data-reveal],[data-reveal]>*{opacity:1!important;transform:none!important;filter:none!important}[data-nav-active]{background-color:#fff}"}
+            {"[data-reveal],[data-reveal]>*{opacity:1!important;transform:none!important;filter:none!important}[data-nav-active]{background-color:#f7ece9}"}
           </style>
         </noscript>
       </head>

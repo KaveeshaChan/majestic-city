@@ -36,17 +36,14 @@ export function DesktopNavLink({
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
       // The "you are here" pill below is a Motion element, so it does not exist
-      // without JavaScript — leaving maroon text on the maroon bar. This hook
-      // lets the no-script stylesheet paint a plain white pill instead.
+      // without JavaScript — leaving brand-colored text with no pill behind it.
+      // This hook lets the no-script stylesheet paint a plain tint pill instead.
       data-nav-active={isActive || undefined}
       className={cn(
-        "relative inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-white/70",
-        // Active gets a solid white "you are here" pill (below) with matching
-        // text; everything else is translucent white on the brand-red bar, so
-        // hover reads as a wash rather than competing with the active state.
+        "relative inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand/40",
         isActive
           ? "text-brand-strong"
-          : "text-white/75 hover:bg-white/12 hover:text-white"
+          : "text-ink/65 hover:bg-surface-muted hover:text-ink"
       )}
     >
       {ownsHighlight && (
@@ -54,7 +51,7 @@ export function DesktopNavLink({
           aria-hidden
           layoutId={NAV_ACTIVE_LAYOUT_ID}
           transition={springSnappy}
-          className="absolute inset-0 rounded-full bg-white shadow-[0_1px_2px_rgb(0_0_0/0.12)]"
+          className="absolute inset-0 rounded-full bg-brand-tint"
         />
       )}
       <span className="relative">{title}</span>
