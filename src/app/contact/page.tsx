@@ -39,7 +39,7 @@ export default function ContactPage() {
         description="Leasing enquiries, lost property, event bookings or anything else — we're on Station Road, seven days a week."
       />
 
-      <section className="mx-auto w-full max-w-[1240px] px-6 py-20 sm:px-8 sm:py-24">
+      <section className="mx-auto w-full max-w-[1240px] px-6 py-20 sm:px-8 sm:py-24 lg:max-w-none">
         <ul className="grid gap-4 sm:grid-cols-3">
           {CHANNELS.map(({ icon: Icon, label, value, href }) => {
             const body = (

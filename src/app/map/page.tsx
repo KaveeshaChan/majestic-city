@@ -21,7 +21,7 @@ export default function MapPage() {
       />
 
       <section className="bg-surface py-10 sm:py-14">
-        <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-8">
+        <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-8 lg:max-w-none">
           <MallMap />
 
           <Reveal className="mt-10 grid gap-3 sm:grid-cols-3">

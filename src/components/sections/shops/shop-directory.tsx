@@ -126,7 +126,7 @@ export function ShopDirectory() {
 
   return (
     <section className="bg-surface pt-6 pb-20 sm:pt-8 sm:pb-28">
-      <div ref={topRef} className="mx-auto w-full max-w-[1240px] px-6 sm:px-8">
+      <div ref={topRef} className="mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:max-w-none">
         <ShopFilters
           query={query}
           onQueryChange={handleQueryChange}

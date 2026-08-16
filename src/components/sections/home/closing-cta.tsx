@@ -13,7 +13,7 @@ export function ClosingCta() {
   return (
     <section className="bg-white px-4 pt-4 pb-16 sm:px-8 sm:pb-24">
       <Reveal distance={24}>
-        <div className="relative isolate mx-auto w-full max-w-[1240px] overflow-hidden rounded-[1.75rem] bg-brand px-6 py-14 sm:rounded-[2.25rem] sm:px-12 sm:py-20">
+        <div className="relative isolate mx-auto w-full max-w-[1240px] overflow-hidden rounded-[1.75rem] bg-brand px-6 py-14 sm:rounded-[2.25rem] sm:px-12 sm:py-20 lg:max-w-none">
           <div
             aria-hidden
             className="absolute inset-0 -z-10 bg-[radial-gradient(90%_120%_at_85%_10%,color-mix(in_oklch,white,transparent_86%)_0%,transparent_60%)]"

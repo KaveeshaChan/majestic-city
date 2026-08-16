@@ -15,7 +15,7 @@ import { siteConfig } from "@/config/site"
 export function VisitInfo() {
   return (
     <section id="visit" className="border-t border-hairline bg-white py-20 sm:py-28">
-      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8">
+      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:max-w-none">
         <Reveal className="max-w-xl">
           <Eyebrow>Plan your visit</Eyebrow>
           <SectionTitle className="mt-5">

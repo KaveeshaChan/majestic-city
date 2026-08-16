@@ -55,7 +55,7 @@ export function Statement() {
 
   return (
     <section className="bg-surface py-20 sm:py-28 lg:py-36">
-      <div ref={ref} className="mx-auto w-full max-w-[1100px] px-6 sm:px-8">
+      <div ref={ref} className="mx-auto w-full max-w-[1100px] px-6 sm:px-8 lg:max-w-none">
         {/* The spaces between words are real text nodes, not margins: a word
             split into bare `inline-block`s reads as one run-on string to a
             screen reader and copies out of the page the same way. */}

@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react"
 /** Placeholder body for routes whose content has not been built yet. */
 export function ComingSoon({ section }: { section: string }) {
   return (
-    <section className="mx-auto w-full max-w-[1240px] px-6 py-24 sm:px-8 sm:py-32">
+    <section className="mx-auto w-full max-w-[1240px] px-6 py-24 sm:px-8 sm:py-32 lg:max-w-none">
       <p className="font-heading text-2xl font-medium tracking-tight text-balance">
         The {section} content is on its way.
       </p>

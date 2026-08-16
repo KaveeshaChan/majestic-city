@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 export function ExperienceBento() {
   return (
     <section id="explore" className="bg-surface pb-20 sm:pb-28">
-      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8">
+      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:max-w-none">
         <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-xl">
             <Eyebrow>What&apos;s inside</Eyebrow>

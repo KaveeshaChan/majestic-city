@@ -65,12 +65,6 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* Tailwind's container scale stops at `7xl` (80rem). The page frame wants to
-     be wider than that without going the full `8xl`, so both steps are named
-     here — `wide` is what the navbar and the hero image are built on. */
-  --container-wide: 86rem;
-  --container-8xl: 90rem;
-
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -181,7 +175,7 @@
   html {
     @apply font-sans;
 
-    /* Anchor targets must clear the fixed pill navbar. */
+    /* Anchor targets must clear the sticky navbar. */
     scroll-padding-top: calc(var(--header-height) + 1.5rem);
     scroll-behavior: smooth;
 

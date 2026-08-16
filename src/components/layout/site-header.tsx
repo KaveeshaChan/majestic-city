@@ -15,11 +15,10 @@ import { DesktopNav } from "./desktop-nav"
 import { MobileNav } from "./mobile-nav"
 
 /**
- * The navbar: logo pinned left, primary links centered, Contact Us pinned
- * right. Always a fully rounded floating pill, centered in the viewport —
- * `8xl` wide at rest, shrinking to `6xl` and lifting its shadow past
- * `scrolledAfter`. It never hides, only its size changes, so wayfinding is
- * always available.
+ * The navbar: logo pinned left, primary links right next to it, Contact Us
+ * pinned right. A flat bar that sits directly on the page — no floating pill,
+ * no shadow at rest — and only picks up a hairline and a soft backdrop once
+ * the page scrolls under it, so content passing beneath stays legible.
  */
 export function SiteHeader() {
   const pathname = usePathname()
@@ -30,21 +29,19 @@ export function SiteHeader() {
   return (
     <motion.header
       data-reveal
-      initial={{ y: -24, opacity: 0 }}
+      initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={springSnappy}
-      className="fixed inset-x-0 top-0 z-100 px-3 pt-3 sm:px-4 sm:pt-4"
+      className={cn(
+        "sticky top-0 z-100 w-full bg-white/95 backdrop-blur-md transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
+        isScrolled
+          ? "border-b border-hairline shadow-[0_1px_0_0_rgba(0,0,0,0.04)]"
+          : "border-b border-transparent"
+      )}
     >
       <nav
         aria-label="Primary"
-        // Same frame as the hero image below, so the logo starts exactly where
-        // the photograph's left edge does.
-        className={cn(
-          "mx-auto flex w-full items-center gap-3 rounded-full border border-black/8 bg-white px-4 shadow-[0_16px_36px_-24px_rgb(0_0_0/0.25)] transition-[max-width,height,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:px-6 lg:px-8",
-          isScrolled
-            ? "h-14 max-w-6xl shadow-[0_28px_60px_-26px_rgb(0_0_0/0.4)] sm:h-16"
-            : "h-16 max-w-8xl sm:h-[4.5rem]"
-        )}
+        className="mx-auto flex h-16 w-full items-center gap-4 px-4 sm:h-[4.5rem] sm:px-6 lg:px-10"
       >
         <Link
           href="/"
@@ -59,11 +56,11 @@ export function SiteHeader() {
           />
         </Link>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2 lg:justify-center">
+        <div className="min-w-0 lg:ml-8">
           <DesktopNav pathname={pathname} />
         </div>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
           <CtaButton
             href={ctaNavItem.href}
             title={ctaNavItem.title}

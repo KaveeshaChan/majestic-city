@@ -26,18 +26,6 @@ import {
  * before launch; they are the numbers a visitor is most likely to trust.
  */
 
-export interface StatItem {
-  value: string
-  label: string
-}
-
-/** Three, not four: the fourth sits in the hero's badge as "Since 1991". */
-export const heroStats: StatItem[] = [
-  { value: "180+", label: "Stores & outlets" },
-  { value: "5", label: "Retail floors" },
-  { value: "1,200", label: "Parking bays" },
-]
-
 export interface QuickFindItem {
   title: string
   hint: string

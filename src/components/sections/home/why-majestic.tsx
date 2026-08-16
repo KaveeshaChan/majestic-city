@@ -11,7 +11,7 @@ import { counters, trustPoints } from "@/config/home"
 export function WhyMajestic() {
   return (
     <section className="border-y border-hairline bg-white py-20 sm:py-28">
-      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8">
+      <div className="mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:max-w-none">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-20">
           <div className="lg:sticky lg:top-[calc(var(--header-height)+2.5rem)] lg:self-start">
             <Reveal>
