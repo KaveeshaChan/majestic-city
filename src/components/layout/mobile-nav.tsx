@@ -12,13 +12,12 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
-import { BrandMark } from "@/components/brand/brand-mark"
-import { allNavItems, isNavItemActive } from "@/config/navigation"
+import { ctaNavItem, isNavItemActive, navItems } from "@/config/navigation"
 import { siteConfig } from "@/config/site"
-import { EASE_OUT } from "@/lib/motion"
+import { EASE_OUT, springSnappy } from "@/lib/motion"
 import { cn } from "@/lib/utils"
+import { CtaButton } from "./cta-button"
 
 interface MobileNavProps {
   pathname: string
@@ -27,12 +26,16 @@ interface MobileNavProps {
 /**
  * Full navigation for anything below `lg`.
  *
- * Radix's Dialog underneath the sheet gives focus trapping, scroll locking and
- * Escape handling for free; Motion only handles the staggered reveal of the
- * list, which mounts fresh on every open.
+ * The trigger is a single controlled button rather than `SheetTrigger` +
+ * `SheetClose`, so the hamburger can morph into a close glyph in place
+ * instead of the sheet owning a second, duplicate control. The real navbar
+ * sits above the sheet (`z-100` vs. the sheet's `z-50`), so it stays visible
+ * — logo and toggle both — while the panel drops in beneath it.
  */
 export function MobileNav({ pathname }: MobileNavProps) {
   const [open, setOpen] = useState(false)
+
+  const ctaIsActive = isNavItemActive(pathname, ctaNavItem.href)
 
   // Every link is wrapped in `SheetClose`, but browser back/forward can also
   // change the route with the sheet open. Adjusting during render (React's
@@ -45,7 +48,13 @@ export function MobileNav({ pathname }: MobileNavProps) {
   }
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    // Non-modal: Radix's modal dialog blocks pointer events on everything
+    // outside its content (via a `body { pointer-events: none }` it injects
+    // and `aria-hidden` on siblings like this header), which would make the
+    // toggle button itself unclickable the moment the sheet opens — since the
+    // button lives in the header, not inside `SheetContent`. Non-modal keeps
+    // the header interactive so the same button can close what it opened.
+    <Sheet open={open} onOpenChange={setOpen} modal={false}>
       <motion.div
         data-reveal
         initial={{ opacity: 0, scale: 0.8 }}
@@ -53,12 +62,40 @@ export function MobileNav({ pathname }: MobileNavProps) {
         transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.24 }}
         className="lg:hidden"
       >
-        <SheetTrigger
-          aria-label="Open navigation menu"
-          className="inline-flex size-10 items-center justify-center rounded-full bg-surface-muted text-ink transition-colors hover:bg-brand-tint hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:outline-none"
+        <button
+          type="button"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((prev) => !prev)}
+          className="relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-surface-muted text-ink transition-colors hover:bg-brand-tint hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:outline-none"
         >
-          <Menu className="size-5" />
-        </SheetTrigger>
+          <motion.span
+            aria-hidden
+            initial={false}
+            animate={{
+              opacity: open ? 0 : 1,
+              rotate: open ? 90 : 0,
+              scale: open ? 0.6 : 1,
+            }}
+            transition={springSnappy}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <Menu className="size-5" />
+          </motion.span>
+          <motion.span
+            aria-hidden
+            initial={false}
+            animate={{
+              opacity: open ? 1 : 0,
+              rotate: open ? 0 : -90,
+              scale: open ? 1 : 0.6,
+            }}
+            transition={springSnappy}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <X className="size-5" />
+          </motion.span>
+        </button>
       </motion.div>
 
       {/* Light, like the page it covers — a dark sheet dropping over a bright
@@ -66,7 +103,7 @@ export function MobileNav({ pathname }: MobileNavProps) {
       <SheetContent
         side="top"
         showCloseButton={false}
-        className="max-h-[92dvh] gap-0 overflow-y-auto rounded-b-3xl border-0 bg-white p-0 text-ink ring-1 ring-black/8"
+        className="max-h-[92dvh] gap-0 overflow-y-auto rounded-b-3xl border-0 bg-white pt-[var(--header-height)] text-ink ring-1 ring-black/8"
       >
         <SheetHeader className="sr-only">
           <SheetTitle>Navigation</SheetTitle>
@@ -75,24 +112,9 @@ export function MobileNav({ pathname }: MobileNavProps) {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex items-center justify-between gap-4 px-4 pt-4 sm:px-6">
-          <SheetClose asChild>
-            <Link href="/" className="block w-[124px] shrink-0">
-              <BrandMark className="w-full shadow-none" sizes="124px" />
-            </Link>
-          </SheetClose>
-
-          <SheetClose
-            aria-label="Close navigation menu"
-            className="inline-flex size-10 items-center justify-center rounded-full bg-surface-muted text-ink transition-colors hover:bg-brand-tint hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:outline-none"
-          >
-            <X className="size-5" />
-          </SheetClose>
-        </div>
-
         <nav className="px-2.5 pt-5 pb-4 sm:px-4">
           <ul className="flex flex-col">
-            {allNavItems.map((item, index) => {
+            {navItems.map((item, index) => {
               const isActive = isNavItemActive(pathname, item.href)
 
               return (
@@ -147,26 +169,19 @@ export function MobileNav({ pathname }: MobileNavProps) {
         </nav>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.5 }}
-          className="mt-auto flex flex-col gap-1 border-t border-hairline px-5 py-5 text-sm sm:px-7"
+          className="border-t border-hairline px-5 py-5 sm:px-7"
         >
-          <a
-            href={`mailto:${siteConfig.contact.email}`}
-            className="w-fit font-medium text-ink transition-colors hover:text-brand"
-          >
-            {siteConfig.contact.email}
-          </a>
-          <a
-            href={`tel:${siteConfig.contact.phone.replace(/\s/g, "")}`}
-            className="w-fit font-medium text-ink transition-colors hover:text-brand"
-          >
-            {siteConfig.contact.phone}
-          </a>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {siteConfig.contact.address}
-          </p>
+          <SheetClose asChild>
+            <CtaButton
+              href={ctaNavItem.href}
+              title={ctaNavItem.title}
+              isActive={ctaIsActive}
+              className="w-full justify-center"
+            />
+          </SheetClose>
         </motion.div>
       </SheetContent>
     </Sheet>

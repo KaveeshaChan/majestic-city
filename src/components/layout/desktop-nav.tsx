@@ -15,7 +15,6 @@ import {
   navItems,
   secondaryNavItems,
 } from "@/config/navigation"
-import { screens, useMediaQuery } from "@/hooks/use-media-query"
 import { riseIn, staggerParent } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 import { DesktopNavLink } from "./nav-link"
@@ -32,9 +31,6 @@ interface DesktopNavProps {
  * secondary items appear inline from `xl`, and collapse into "More" below it.
  */
 export function DesktopNav({ pathname }: DesktopNavProps) {
-  const isDesktop = useMediaQuery(screens.lg)
-  const isWide = useMediaQuery(screens.xl)
-
   const secondaryIsActive = secondaryNavItems.some((item) =>
     isNavItemActive(pathname, item.href)
   )
@@ -49,7 +45,6 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
     >
       {navItems.map((item) => {
         const isActive = isNavItemActive(pathname, item.href)
-        const isInline = item.priority === "primary" || isWide
 
         return (
           <motion.div
@@ -61,7 +56,6 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
               href={item.href}
               title={item.title}
               isActive={isActive}
-              ownsHighlight={isActive && isDesktop && isInline}
             />
           </motion.div>
         )
@@ -86,10 +80,8 @@ function OverflowMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "group inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand/40 data-[state=open]:bg-brand-tint data-[state=open]:text-brand-strong",
-          isActive
-            ? "bg-brand-tint text-brand-strong"
-            : "text-ink/65 hover:bg-surface-muted hover:text-ink"
+          "group inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand/40 data-[state=open]:text-ink",
+          isActive ? "text-muted-foreground" : "text-ink"
         )}
       >
         More
