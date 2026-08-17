@@ -1,8 +1,9 @@
 "use client"
 
 import { Fragment } from "react"
+import Link from "next/link"
 import { motion } from "motion/react"
-import { Globe, Mail, Phone } from "lucide-react"
+import { Compass, Globe, Heart, Mail, Phone, Sparkles, Store } from "lucide-react"
 
 import {
   shopCategoryMap,
@@ -11,18 +12,7 @@ import {
   type Shop,
 } from "@/config/shops"
 import { EASE_OUT } from "@/lib/motion"
-
-/**
- * One store in the directory.
- *
- * The legacy page printed the same maroon logo on sixty tiles, so nothing on the
- * page carried information — the eye had no reason to stop anywhere. Here the
- * artwork is replaced by the store's own initials, set oversized and translucent
- * behind the copy (the same device the floor guide uses for its level numbers),
- * with the category icon as the one solid mark. Every card then looks different
- * *because its content is different*, which is the only kind of variety worth
- * having.
- */
+import { cn } from "@/lib/utils"
 
 /** Splits a name around the search term so the match can be marked. */
 function highlight(name: string, query: string) {
@@ -48,24 +38,30 @@ function highlight(name: string, query: string) {
 
 interface ShopCardProps {
   shop: Shop
-  /** The live search term, so the matched run can be marked in the name. */
   query: string
-  /** Position in the current result set, used to stagger the entrance. */
   index: number
+  isBookmarked: boolean
+  onToggleBookmark: (id: string) => void
+  onSelect: (shop: Shop) => void
 }
 
-export function ShopCard({ shop, query, index }: ShopCardProps) {
+export function ShopCard({
+  shop,
+  query,
+  index,
+  isBookmarked,
+  onToggleBookmark,
+  onSelect,
+}: ShopCardProps) {
   const category = shopCategoryMap.get(shop.category)
   const floor = shopFloorMap.get(shop.floor)
-  const Icon = category?.icon
+  const Icon = category?.icon ?? Store
 
   return (
     <motion.li
       layout="position"
-      initial={{ opacity: 0, y: 12, scale: 0.97 }}
+      initial={{ opacity: 0, y: 14, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      // Exit carries its own transition so removals stay instant while
-      // arrivals ripple: capped, or a wide result set would crawl.
       exit={{
         opacity: 0,
         scale: 0.97,
@@ -74,89 +70,137 @@ export function ShopCard({ shop, query, index }: ShopCardProps) {
       transition={{
         duration: 0.36,
         ease: EASE_OUT,
-        delay: Math.min(index * 0.022, 0.28),
+        delay: Math.min(index * 0.02, 0.28),
       }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[1.25rem] bg-white p-5 ring-1 ring-black/6 transition-[box-shadow,transform,--tw-ring-color] duration-300 hover:-translate-y-1 hover:ring-brand/25 hover:shadow-[0_26px_54px_-32px_rgb(0_0_0/0.4)]"
+      className="group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] bg-white p-5 ring-1 ring-black/6 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:ring-brand/35 hover:shadow-[0_20px_45px_-20px_rgba(123,20,22,0.18)]"
     >
-      {/* The store's own initials, doing the job sixty identical logos used to. */}
+      {/* Background Watermark Initials */}
       <span
         aria-hidden
-        className="pointer-events-none absolute -top-3 right-2 font-heading text-[4.5rem] leading-none font-bold tracking-tighter text-ink/[0.04] transition-colors duration-500 group-hover:text-brand/[0.08]"
+        className="pointer-events-none absolute -top-4 -right-1 font-heading text-[5.2rem] leading-none font-extrabold tracking-tighter text-ink/[0.035] select-none transition-colors duration-500 group-hover:text-brand/[0.08]"
       >
         {shopInitials(shop.name)}
       </span>
 
-      <span className="relative flex size-11 items-center justify-center rounded-xl bg-brand-tint text-brand-strong ring-1 ring-brand/10 transition-colors duration-300 group-hover:bg-brand group-hover:text-brand-foreground group-hover:ring-brand">
-        {Icon ? <Icon className="size-5" strokeWidth={1.6} /> : null}
-      </span>
+      {/* Top Bar: Category Icon & Bookmark Heart */}
+      <div className="relative flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="flex size-11 items-center justify-center rounded-xl bg-brand-tint text-brand-strong ring-1 ring-brand/10 transition-all duration-300 group-hover:bg-brand group-hover:text-white group-hover:shadow-md group-hover:shadow-brand/25">
+            <Icon className="size-5" strokeWidth={1.75} />
+          </span>
+          {category?.id === "entertainment" ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-200/50">
+              <Sparkles className="size-3" /> Cineplex
+            </span>
+          ) : null}
+        </div>
 
-      <h3 className="relative mt-4 font-heading text-base leading-snug font-medium tracking-tight text-pretty">
-        {highlight(shop.name, query).map((part, index) => (
-          <Fragment key={index}>
-            {part.match ? (
-              <mark className="rounded-[3px] bg-brand/12 px-0.5 text-brand-strong">
-                {part.text}
-              </mark>
-            ) : (
-              part.text
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggleBookmark(shop.id)
+          }}
+          aria-label={isBookmarked ? "Remove from bookmarks" : "Save store to bookmarks"}
+          className={cn(
+            "grid size-9 place-items-center rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
+            isBookmarked
+              ? "bg-rose-50 text-rose-600 ring-1 ring-rose-200 shadow-xs"
+              : "bg-surface-muted/80 text-muted-foreground hover:bg-black/5 hover:text-foreground"
+          )}
+        >
+          <Heart
+            className={cn(
+              "size-4 transition-transform duration-200",
+              isBookmarked && "fill-rose-600 scale-110"
             )}
-          </Fragment>
-        ))}
-      </h3>
+          />
+        </button>
+      </div>
 
-      {category ? (
-        <p className="relative mt-1.5 text-sm text-muted-foreground">
-          {category.label}
-        </p>
-      ) : null}
+      {/* Clickable Area for Quick View */}
+      <div
+        onClick={() => onSelect(shop)}
+        className="relative mt-4 flex-1 cursor-pointer"
+      >
+        <h3 className="font-heading text-lg leading-snug font-semibold tracking-tight text-foreground transition-colors group-hover:text-brand text-pretty">
+          {highlight(shop.name, query).map((part, idx) => (
+            <Fragment key={idx}>
+              {part.match ? (
+                <mark className="rounded-[3px] bg-brand/15 px-0.5 font-bold text-brand-strong">
+                  {part.text}
+                </mark>
+              ) : (
+                part.text
+              )}
+            </Fragment>
+          ))}
+        </h3>
 
-      {/* Pushed to the bottom so cards of unequal height still line up. */}
+        {category ? (
+          <p className="mt-1 text-xs font-medium text-muted-foreground">
+            {category.label}
+          </p>
+        ) : null}
+      </div>
+
+      {/* Floor & Unit Tag Row */}
       <div className="relative mt-auto flex flex-wrap items-center gap-1.5 pt-5">
-        <span className="rounded-full bg-surface-muted px-2.5 py-1 text-xs font-medium text-foreground/70">
+        <span className="rounded-full bg-surface-muted px-2.5 py-1 text-xs font-medium text-foreground/80 ring-1 ring-black/5">
           {floor?.label ?? shop.floor}
         </span>
         {shop.unit ? (
-          <span className="rounded-full bg-surface-muted px-2.5 py-1 font-mono text-xs text-muted-foreground">
-            {shop.unit}
+          <span className="rounded-full bg-surface-muted px-2.5 py-1 font-mono text-xs text-muted-foreground ring-1 ring-black/5">
+            Unit {shop.unit}
           </span>
         ) : null}
       </div>
 
-      {shop.phone || shop.email || shop.web ? (
-        <div className="relative mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-3 text-sm">
+      {/* Card Action Strip */}
+      <div className="relative mt-3 flex items-center justify-between border-t border-hairline pt-3">
+        <button
+          type="button"
+          onClick={() => onSelect(shop)}
+          className="inline-flex items-center gap-1 text-xs font-medium text-brand transition-colors hover:text-brand-strong focus-visible:outline-none"
+        >
+          View details →
+        </button>
+
+        <div className="flex items-center gap-2 text-xs">
+          <Link
+            href="/map"
+            onClick={(e) => e.stopPropagation()}
+            title="Locate on floor map"
+            className="grid size-7 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-brand-tint hover:text-brand"
+          >
+            <Compass className="size-3.5" />
+          </Link>
+
           {shop.phone ? (
             <a
               href={`tel:${shop.phone.replace(/\s+/g, "")}`}
-              className="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-brand"
+              onClick={(e) => e.stopPropagation()}
+              title={`Call ${shop.name}`}
+              className="grid size-7 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-brand-tint hover:text-brand"
             >
               <Phone className="size-3.5" />
-              {shop.phone}
             </a>
           ) : null}
-          {shop.email ? (
-            <a
-              href={`mailto:${shop.email}`}
-              aria-label={`Email ${shop.name}`}
-              className="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-brand"
-            >
-              <Mail className="size-3.5" />
-              Email
-            </a>
-          ) : null}
+
           {shop.web ? (
             <a
               href={shop.web}
               target="_blank"
               rel="noreferrer"
-              aria-label={`Visit ${shop.name} online`}
-              className="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-brand"
+              onClick={(e) => e.stopPropagation()}
+              title={`Visit website`}
+              className="grid size-7 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-brand-tint hover:text-brand"
             >
               <Globe className="size-3.5" />
-              Website
             </a>
           ) : null}
         </div>
-      ) : null}
+      </div>
     </motion.li>
   )
 }
